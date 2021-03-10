@@ -41,9 +41,9 @@ class User(AbstractUser):
     OTHER = 'other'
 
     GENDER_CHOICES = [
-        (MALE, _('male')),
-        (FEMALE, _('female')),
-        (OTHER, _('other')),
+        (MALE, _('Male')),
+        (FEMALE, _('Female')),
+        (OTHER, _('Other')),
     ]
 
     username = None
