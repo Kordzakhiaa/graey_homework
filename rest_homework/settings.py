@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'ecommerce.apps.EcommerceConfig',
     'user.apps.UserConfig',
     'rest_framework',

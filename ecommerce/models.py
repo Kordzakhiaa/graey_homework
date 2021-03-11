@@ -1,21 +1,41 @@
 from django.db import models
 
+from django.utils.translation import gettext_lazy as _
+
 
 class Category(models.Model):
-    pass
+    title = models.CharField(max_length=150, verbose_name=_('Category title'))
+
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
 
 
 class Product(models.Model):
-    pass
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    title = models.CharField(max_length=150, verbose_name=_('Product title'))
+    slug = models.SlugField(max_length=150)  # @TODO what is slug :d
+    price = models.DecimalField(decimal_places=6, max_digits=8)
+    description = models.TextField()
+    is_published_date = models.DateTimeField(auto_now_add=True)
+    is_updated_date = models.DateTimeField(auto_now=True)
 
 
 class Tag(models.Model):
-    pass
-
-
-class CartItem(models.Model):
-    pass
+    title = models.CharField(max_length=150, verbose_name=_('Tag title'))
+    category = models.ManyToManyField(Product)
 
 
 class Cart(models.Model):
-    pass
+    owner = models.OneToOneField(to='user.User', on_delete=models.SET_NULL, null=True)
+
+
+class CartItem(models.Model):
+    category = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    active = models.BooleanField()
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
