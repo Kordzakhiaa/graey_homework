@@ -18,22 +18,32 @@ class Category(models.Model):
 
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    title = models.CharField(max_length=150, verbose_name=_('Product title'))
+    title = models.CharField(max_length=150, verbose_name=_('Product name'))
     slug = models.SlugField(max_length=150)  # @TODO what is slug :d
-    price = models.DecimalField(decimal_places=6, max_digits=8)
+    price = models.DecimalField(decimal_places=2, max_digits=4)
     description = models.TextField()
     is_published_date = models.DateTimeField(auto_now_add=True)
     is_updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Tag(models.Model):
     title = models.CharField(max_length=150, verbose_name=_('Tag title'))
     category = models.ManyToManyField(Product)
 
+    def __str__(self):
+        return self.title
+
 
 class Cart(models.Model):
     owner = models.OneToOneField(to='user.User', on_delete=models.SET_NULL, null=True)
+
     # @TODO serializer-shi davfiltro active statusis mixedvit
+
+    def __str__(self):
+        return self.owner
 
 
 class CartItem(models.Model):

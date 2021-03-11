@@ -6,7 +6,10 @@ from ecommerce.models import Cart, Tag, Product, Category
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'title', ]
+        fields = [
+            'id',
+            'title',
+        ]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -14,7 +17,6 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'id',
-            # 'category',
             'title',
             'slug',
             'price',
@@ -25,9 +27,16 @@ class ProductSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
+        field = [
+            'id',
+            'owner',
+        ]
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['id', 'title']
+        fields = [
+            'id',
+            'title',
+        ]
