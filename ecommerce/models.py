@@ -5,11 +5,12 @@ from django.utils.translation import gettext_lazy as _
 
 class Category(models.Model):
     title = models.CharField(max_length=150, verbose_name=_('Category title'))
+    order = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
-        ordering = ['title']
+        ordering = ['order']
 
     def __str__(self):
         return self.title
@@ -32,6 +33,7 @@ class Tag(models.Model):
 
 class Cart(models.Model):
     owner = models.OneToOneField(to='user.User', on_delete=models.SET_NULL, null=True)
+    # @TODO serializer-shi davfiltro active statusis mixedvit
 
 
 class CartItem(models.Model):
