@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from ecommerce.models import Product, Category, Cart, CartItem
 from ecommerce.permissions import IsAdminOrReadOnly
-from ecommerce.serializers import ProductListSerializer, CategoryListSerializer, CartSerializers, AddToCartSerializer, \
+from ecommerce.serializers import ProductListSerializer, CategoryListSerializer, CartSerializers, \
     CartItemSerializer
 from rest_framework import generics, status, filters, viewsets
 
@@ -38,12 +38,20 @@ class CartListView(generics.ListAPIView):
 
 
 class AddToCartView(viewsets.ModelViewSet):
-    serializer_class = [AddToCartSerializer]
+    serializer_class = CartItemSerializer
     permission_classes = [IsAuthenticated]
+    queryset = CartItem.objects.all()
 
-    @action(detail=True, methods=['post', 'get'])
-    def add_to_cart(self, request, pk):
-        pass
+    @action(detail=True, methods=['post'])
+    def add_to_cart(self, request, *args, **kwargs):
+        serializer = CartItemSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(
+            product=request.user.product,
+            cart=request.user.cart,
+            active=True,
+        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CartItemViewSet(viewsets.ModelViewSet):

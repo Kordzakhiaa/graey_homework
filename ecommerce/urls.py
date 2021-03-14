@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from ecommerce.views import ProductListView, CategoryView, CartListView, CartItemViewSet
+from ecommerce.views import ProductListView, CategoryView, CartListView, CartItemViewSet, AddToCartView
 
 app_name = 'ecommerce'
 
@@ -12,6 +12,7 @@ urlpatterns = [
 ]
 router = DefaultRouter()
 
-router.register('cart_items', CartItemViewSet)
+router.register('cart_items', CartItemViewSet, basename='cart_item')
+router.register('to_cart', AddToCartView, basename='add_to_cart')
 
 urlpatterns += router.urls

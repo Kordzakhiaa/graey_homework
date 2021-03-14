@@ -28,14 +28,13 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    product = serializers.ReadOnlyField(source='product.title')
-
     class Meta:
         model = CartItem
         fields = [
             'product',
             'cart',
             'quantity',
+            'active'
         ]
 
 
@@ -66,7 +65,7 @@ class TagSerializer(serializers.ModelSerializer):
         ]
 
 
-class AddToCartSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CartItem
-        fields = ['quantity']
+# class AddToCartSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = CartItem
+#         fields = ['active']
