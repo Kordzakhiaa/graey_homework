@@ -3,25 +3,28 @@ from rest_framework import serializers
 from ecommerce.models import Cart, Tag, Product, Category
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = [
-            'id',
-            'title',
-        ]
+        fields = '__all__'
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id',
             'title',
             'slug',
             'price',
             'description',
+            'category',
         ]
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        exclude = ('category',)
 
 
 class CartSerializer(serializers.ModelSerializer):
