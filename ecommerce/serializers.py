@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ecommerce.models import Cart, Tag, Product, Category
+from ecommerce.models import Cart, Tag, Product, Category, CartItem
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
@@ -27,13 +27,17 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         exclude = ('category',)
 
 
-class CartSerializer(serializers.ModelSerializer):
+class CartItemSerializer(serializers.ModelSerializer):
+    price = serializers.CharField(source='product.price', read_only=True)
+
     class Meta:
-        model = Cart
+        model = CartItem
         field = [
-            'id',
-            'owner',
+            'product',
+            'cart',
+            'quantity',
         ]
+    # @TODO: Filter by active carts
 
 
 class TagSerializer(serializers.ModelSerializer):

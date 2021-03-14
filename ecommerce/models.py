@@ -41,11 +41,11 @@ class Cart(models.Model):
     owner = models.OneToOneField(to='user.User', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.owner
+        return f"Cart - {self.owner.email}"
 
 
 class CartItem(models.Model):
-    category = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField()
     active = models.BooleanField()
