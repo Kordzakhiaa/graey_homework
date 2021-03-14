@@ -1,5 +1,5 @@
+from django.db.models import F, Sum, DecimalField
 from rest_framework import serializers
-
 from ecommerce.models import Cart, Tag, Product, Category, CartItem
 
 
@@ -28,16 +28,33 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    price = serializers.CharField(source='product.price', read_only=True)
+    product = serializers.ReadOnlyField(source='product.title')
 
     class Meta:
         model = CartItem
-        field = [
+        fields = [
             'product',
             'cart',
             'quantity',
         ]
-    # @TODO: Filter by active carts
+
+
+class CartSerializers(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True)
+    total_cost = serializers.SerializerMethodField(method_name='get_total_cost')
+
+    def get_total_cost(self, obj):  # noqa
+        total_price = CartItem.objects.filter(active=True).aggregate(
+            total_price=Sum((F('product__price') * F('quantity')), output_field=DecimalField())).get('total_price')
+
+        return total_price
+
+    class Meta:
+        model = Cart
+        fields = [
+            'items',
+            'total_cost',
+        ]
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -47,3 +64,9 @@ class TagSerializer(serializers.ModelSerializer):
             'id',
             'title',
         ]
+
+
+class AddToCartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['quantity']
